@@ -29,7 +29,7 @@ function shuffle(array) {
 }
 
 
-//get shuffled cards
+//GETTING SHUFFLED CARDS
 function shuffledCards() {
   let shuffled = shuffle(cards);
   shuffled.forEach(function(newCard) {
@@ -50,7 +50,7 @@ shuffledCards();
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-//variables list
+//VARIABLES
 let resetBtn = document.querySelector('.restart');
 let timer = document.querySelector('.timer');
 let seconds = 0, minutes = 0, hours = 0;
@@ -69,7 +69,7 @@ let replayButton = document.querySelector('.replay');
 let close = document.querySelector('.close');
 
 
-//reset buttons
+//RESET BUTTONS
 replayButton.addEventListener('click', function(e) {
   resetBoard();
   modal.classList.add('hidden');
@@ -83,20 +83,24 @@ close.addEventListener('click', function(e) {
 });
 
 
-//welcome message
+//WELCOME MESSAGE ON BODY LOAD
 document.body.onload = welcomeMessage();
 
-//html
+//HTML
 timer.innerHTML = "0 mins 0 secs";
 
 
-//start timer
+//START TIMER
 function startTimer() {
+  //REITERATING THAT TIMER IS 0,0,0
   let seconds = 0, minutes = 0, hours = 0;
+  //START INTERVAL FOR TIMER
   interval = setInterval(function() {
+    //DISPLAY FOR TIMER
     timer.innerHTML = minutes + ' mins ' + seconds + ' secs'
+    //INCREMINTING BY ONE
     seconds++;
-    //convert 60 secs to minute
+    //CONVERTING 60 SECONDS TO ONE MINUTE
     if (seconds == 60) {
       minutes++;
       seconds = 0;
@@ -105,32 +109,38 @@ function startTimer() {
   }, 1000);
 };
 
-//format timer
+//FORMAT TIMER
 function formatTimer() {
   let min = minutes < 10 ? '0' + String(minutes) : String(minutes);
   let sec = seconds < 10 ? '0' + String(seconds) : String(seconds);
   return min + ':' + sec;
 };
 
-//stop timer
+//STOP TIMER
 function stopTimer() {
   clearInterval(interval);
 };
 
-//reset timer
+//RESET/CLEAR TIMER
 function resetTimer() {
+  //STOPS TIMER, RESETS TO 0,0,0 AND RESETS DISPLAY
   clearInterval(interval);
   let seconds = 0, minutes = 0, hours = 0;
   timer.innerHTML = "0 mins 0 secs";
 };
 
-//flipping the cards and adding event listener
+//FLIPPING CARDS
+//EVENT LISTENER
 deck.addEventListener('click', card => {
-  //set click target
+  //SETTING CLICK TARGET TO EVENT
   let clickTarget = card.target;
+  //IF TARGET IS A .CARD CLASS AND OPEN CARD ARRAY IS LESS THAN TWO,
+  //THEN TOGGLE CARDS OPEN AND ADD TO OPEN CARD ARRAY
   if(clickTarget.classList.contains('card') && openCards.length < 2) {
     toggleOpen(clickTarget);
     addOpenCard(clickTarget);
+    //IF OPEN CARD [] IS 2 THEN CHECK FOR MATCH, MOVE COUNTER 1 CHECK MOVES IN
+    //STAR COUNTER FUNCTION
     if(openCards.length === 2) {
       matchCheck(clickTarget);
       moveCounter();
@@ -139,18 +149,19 @@ deck.addEventListener('click', card => {
   }
 });
 
-//toggle cards open
+//TOGGLE CARDS OPEN
 function toggleOpen(clickTarget) {
   clickTarget.classList.toggle('open');
   clickTarget.classList.toggle('show');
   clickTarget.classList.toggle('disable');
 };
 
-//add open card array
+//ADDING TO OPEN CARD ARRAY
 function addOpenCard(clickTarget) {
-  //pushing event cliking the target cards to open cards
+  //PUSHING EVENT/CLICK TARGET CARDS TO OPEN CARDS []
   openCards.push(clickTarget);
   // console.log(openCards);
+  //IF OPEN CARDS IS ONLY 1 AND COUNTER IS 0 THEN START TIMER
   if (openCards.length == 1 && myCounter == 0) {
     startTimer();
   }
@@ -159,6 +170,9 @@ function addOpenCard(clickTarget) {
 //MATCHING/NOT MATCHING
 function matchCheck() {
   if (
+    //IF FIRST AND SECOND CARDS IN OPEN CARD [] ARE THE SAME THEN DISPLAY
+    //MATCHED MESSAGE, ADD CLASS MATCH, RESET OPEN CARD [] AND CHECK
+    //FOR TOTAL MATCHING COUNT TO DISPLAY FINISH MODAL
     openCards[0].firstElementChild.className ===
     openCards[1].firstElementChild.className
   ) {
@@ -172,8 +186,8 @@ function matchCheck() {
         displayFinished();
       },500);
     };
-    //if cards dont match dispay message, add no match class, toggle cards off
-    //remove class, clear open, delay 900ms
+    //IF THEY DON'T MATCH; DISPLAY MESSAGE, ADD NOMATCH CLASS, TOGGLE CARDS OFF
+    //REMOVE CLASS, RESET OPEN [] DELAY FOR 900ms
   } else {
     messageBoard(misMatch);
     openCards[0].classList.add('noMatch');
@@ -188,12 +202,12 @@ function matchCheck() {
   }
 };
 
-//clear open cards array
+//CLEAR OPEN CARDS ARRAY
 function clearOpen() {
   openCards = [];
 }
 
-//reset new game function
+//RESET/NEW GAME FUNCTION
 function resetBoard() {
   cards.forEach(function(card) {
     card.classList = "card";
@@ -207,19 +221,19 @@ function resetBoard() {
     resetStar();
 };
 
-//reset counter
+//RESET COUNTER
 function resetCounter() {
   myCounter = 0;
   counter.innerHTML = '0';
 }
 
-//moving counter
+//MOVING COUNTER
 function moveCounter() {
   myCounter++;
   counter.innerHTML = myCounter;
 };
 
-//messages
+//MESSAGES
 function messageBoard(message) {
   gameMessage.innerHTML = message;
   setTimeout(function() {
@@ -240,14 +254,15 @@ function welcomeMessage() {
   }, 5000);
 };
 
-//star rating
+//STARS
+//STAR RATING BASED ON COUNTER`
 function starCounter() {
   if (myCounter === 10 || myCounter === 15 || myCounter === 20) {
     hideStar();
     }
 };
 
-//hiding stars loop;
+//LOOP FOR HIDING STARS;
 function hideStar() {
   for(star of stars) {
     if(star.style.display !== 'none') {
@@ -257,17 +272,18 @@ function hideStar() {
   };
 };
 
-//star styles loop
+//LOOP THROUGH STAR STYLES
 function resetStar() {
   stars.forEach(function(star) {
     star.style.display = '';
   });
 };
 
-//star count for modal
+//GET STAR COUNT FOR MODAL
 function getStars() {
-  //setting variable argument
+  //SETTING VARIABLE FOR ARGUMENT
   let starRating = 0;
+  //FOR LOOP TO CHECK FOR STYLE DISPLAYS NOT NONE AND TAKE COUNT
   for (star of stars) {
     if (star.style.display !== 'none') {
       starRating++;
